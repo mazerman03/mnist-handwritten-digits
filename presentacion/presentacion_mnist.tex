@@ -1,0 +1,279 @@
+%-------------------------
+% Presentación: Clasificación de Dígitos MNIST con MLP
+% Para Overleaf (pdflatex) — máx 5 minutos
+%-------------------------
+
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+% Title info - EDITA ESTOS CAMPOS
+\title[MNIST MLP]{Clasificación de Dígitos Escritos a Mano con MLP}
+\subtitle{Dataset MNIST + Imágenes Propias}
+\author{Tu Nombre Aquí}
+\institute{Introducción a Machine Learning}
+\date{\today}
+
+\begin{document}
+
+%========== SLIDE 1: TÍTULO ==========
+\begin{frame}
+\titlepage
+\end{frame}
+
+%========== SLIDE 2: PROBLEMA ==========
+\begin{frame}{El Problema}
+\begin{columns}
+\column{0.55\textwidth}
+\begin{itemize}
+    \item \textbf{Objetivo:} Clasificar dígitos escritos a mano (0--9)
+    \item \textbf{Dataset:} MNIST --- 70,000 imágenes
+    \begin{itemize}
+        \item 60,000 entrenamiento
+        \item 10,000 prueba
+    \end{itemize}
+    \item \textbf{Formato:} 28$\times$28 píxeles, escala de grises
+    \item \textbf{Reto adicional:} Probar con imágenes propias dibujadas a mano en papel
+\end{itemize}
+
+\column{0.4\textwidth}
+\begin{center}
+    % REEMPLAZA con tu screenshot de resultados/ejemplos_mnist.png
+    \textit{[Insertar imagen: ejemplos\_mnist.png]}
+
+    \small Ejemplos de dígitos en MNIST
+\end{center}
+\end{columns}
+\end{frame}
+
+%========== SLIDE 3: EDA ==========
+\begin{frame}{Exploración del Dataset}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+    % REEMPLAZA con resultados/distribucion_clases.png
+    \textit{[Insertar imagen: distribucion\_clases.png]}
+
+    \small Distribución de clases balanceada
+\end{center}
+
+\column{0.5\textwidth}
+\begin{center}
+    % REEMPLAZA con resultados/promedios_digitos.png
+    \textit{[Insertar imagen: promedios\_digitos.png]}
+
+    \small Imagen promedio por dígito
+\end{center}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{itemize}
+    \item Las clases están \textbf{balanceadas} ($\sim$6,000--7,000 por dígito)
+    \item Las imágenes promedio muestran los \textbf{patrones característicos} de cada dígito
+\end{itemize}
+\end{frame}
+
+%========== SLIDE 4: MODELO ==========
+\begin{frame}{Modelo: Red Neuronal MLP}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Arquitectura:}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Capa} & \textbf{Neuronas} \\
+\midrule
+Entrada & 784 (28$\times$28 px) \\
+Oculta 1 & 128 (ReLU) \\
+Oculta 2 & 64 (ReLU) \\
+Salida & 10 (dígitos 0--9) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{Hiperparámetros:}
+\begin{itemize}
+    \item Optimizador: Adam
+    \item Learning rate: 0.001
+    \item Batch size: 256
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Preprocesamiento:}
+\begin{itemize}
+    \item Normalización de píxeles a [0, 1]
+    \item División estándar 60k/10k
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{¿Qué es un MLP?}
+\begin{itemize}
+    \item Red neuronal con capas \textbf{completamente conectadas}
+    \item Cada neurona aplica una suma ponderada + función de activación
+    \item Aprende mediante \textbf{backpropagation}
+\end{itemize}
+\end{columns}
+\end{frame}
+
+%========== SLIDE 5: ENTRENAMIENTO ==========
+\begin{frame}{Entrenamiento}
+\begin{columns}
+\column{0.55\textwidth}
+\begin{center}
+    % REEMPLAZA con resultados/curva_perdida.png
+    \textit{[Insertar imagen: curva\_perdida.png]}
+
+    \small Curva de pérdida durante el entrenamiento
+\end{center}
+
+\column{0.4\textwidth}
+\begin{itemize}
+    \item La pérdida \textbf{disminuye} consistentemente
+    \item El modelo \textbf{converge} correctamente
+    \item No se observa sobreajuste significativo
+\end{itemize}
+\end{columns}
+\end{frame}
+
+%========== SLIDE 6: EVALUACIÓN MNIST ==========
+\begin{frame}{Evaluación en MNIST}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+    % REEMPLAZA con resultados/matriz_confusion.png
+    \textit{[Insertar imagen: matriz\_confusion.png]}
+\end{center}
+
+\column{0.5\textwidth}
+\textbf{Resultados en test set:}
+\begin{itemize}
+    \item \textbf{Accuracy: $\sim$97\%+}
+    \item Precision y recall altos para todos los dígitos
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Observaciones:}
+\begin{itemize}
+    \item Los dígitos más confundidos son pares como (3,5), (4,9), (7,1)
+    \item La diagonal de la matriz es muy dominante $\rightarrow$ pocas confusiones
+\end{itemize}
+\end{columns}
+\end{frame}
+
+%========== SLIDE 7: IMÁGENES PROPIAS ==========
+\begin{frame}{Imágenes Propias: Proceso}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Creación:}
+\begin{enumerate}
+    \item Dibujar dígitos con marcador en papel blanco
+    \item Fotografiar cada dígito
+    \item Preprocesar automáticamente:
+    \begin{itemize}
+        \item Convertir a escala de grises
+        \item Binarizar y recortar al dígito
+        \item Redimensionar a 28$\times$28
+        \item Centrar con padding (como MNIST)
+        \item Invertir colores (fondo negro)
+    \end{itemize}
+\end{enumerate}
+
+\column{0.5\textwidth}
+\begin{center}
+    % REEMPLAZA con resultados/antes_despues.png (o un crop)
+    \textit{[Insertar imagen: antes\_despues.png]}
+
+    \small Antes y después del preprocesamiento
+\end{center}
+\end{columns}
+
+\vspace{0.2cm}
+\begin{alertblock}{Importante}
+Las imágenes propias \textbf{NO} se usaron para entrenar --- solo para \textbf{probar} el modelo.
+\end{alertblock}
+\end{frame}
+
+%========== SLIDE 8: RESULTADOS PROPIAS ==========
+\begin{frame}{Resultados con Imágenes Propias}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+    % REEMPLAZA con resultados/resumen_todas_predicciones.png
+    \textit{[Insertar imagen: resumen\_todas\_predicciones.png]}
+
+    \small Predicciones en imágenes propias
+\end{center}
+
+\column{0.5\textwidth}
+\begin{center}
+    % REEMPLAZA con resultados/accuracy_por_digito.png
+    \textit{[Insertar imagen: accuracy\_por\_digito.png]}
+
+    \small Accuracy por dígito
+\end{center}
+\end{columns}
+
+\vspace{0.2cm}
+\begin{itemize}
+    \item Accuracy en MNIST test: $\sim$97\%+
+    \item Accuracy en imágenes propias: \textbf{[INSERTAR]\%}
+    % Actualiza con tu resultado real después de correr el notebook
+\end{itemize}
+\end{frame}
+
+%========== SLIDE 9: EJEMPLO INDIVIDUAL ==========
+\begin{frame}{Ejemplo de Predicción Individual}
+\begin{center}
+    % REEMPLAZA con una de las imágenes de resultados/prediccion_X_XX.png
+    \textit{[Insertar imagen: prediccion\_X\_XX.png]}
+
+    \vspace{0.3cm}
+    \small Para cada imagen se muestra: la foto original, la versión procesada (28$\times$28), \\
+    y la probabilidad que el modelo asigna a cada dígito.
+\end{center}
+\end{frame}
+
+%========== SLIDE 10: CONCLUSIONES ==========
+\begin{frame}{Conclusiones}
+\begin{enumerate}
+    \item Un \textbf{MLP sencillo} (2 capas ocultas) logra $>$97\% accuracy en MNIST
+    \item El rendimiento en imágenes propias depende fuertemente de la \textbf{calidad del preprocesamiento}
+    \item Los dígitos más difíciles comparten \textbf{rasgos visuales similares} (ej: 3/5, 4/9, 1/7)
+    \item \textbf{Lección clave:} un modelo es tan bueno como la representatividad de sus datos de entrenamiento respecto a los datos reales
+\end{enumerate}
+
+\vspace{0.5cm}
+\begin{block}{Posibles mejoras}
+\begin{itemize}
+    \item Usar redes convolucionales (CNN) para capturar mejor los patrones espaciales
+    \item Aumentar datos de entrenamiento con transformaciones (data augmentation)
+    \item Ajustar hiperparámetros con validación cruzada
+\end{itemize}
+\end{block}
+\end{frame}
+
+%========== SLIDE 11: GRACIAS ==========
+\begin{frame}
+\begin{center}
+    {\Huge ¿Preguntas?}
+
+    \vspace{1cm}
+    {\large Código disponible en GitHub}
+
+    \vspace{0.3cm}
+    \texttt{github.com/TUUSUARIO/mnist-handwritten-digits}
+\end{center}
+\end{frame}
+
+\end{document}
